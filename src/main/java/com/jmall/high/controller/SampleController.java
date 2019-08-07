@@ -26,9 +26,16 @@ public class SampleController {
     }
 
     @RequestMapping("/db/get")
-    @ResponseBody
+    @ResponseBody // 将返回值序列化为json
     public Result<User> dbGet() {
         User user = userService.getById(1);
         return Result.success(user);
+    }
+
+    @RequestMapping("/db/tx")
+    @ResponseBody // 将返回值序列化为json
+    public Result<Boolean> dbTx() {
+        userService.tx();
+        return Result.success(true);
     }
 }
