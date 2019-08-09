@@ -6,6 +6,10 @@ package com.jmall.high.pojo;
 
 import java.util.Date;
 
+/**
+ * 配置文件中有mybatis.configuration.map-underscore-to-camel-case=true
+ * 即自动把表名转换为驼峰写法
+ */
 public class MiaoshaUser {
 	private Long id;
 	private String nickname;
