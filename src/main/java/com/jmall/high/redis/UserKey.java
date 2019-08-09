@@ -1,17 +1,16 @@
 /**
- * created by Zheng Jiateng on 2019/8/1.
+ * created by Zheng Jiateng on 2019/8/2.
  */
-
 
 package com.jmall.high.redis;
 
 public class UserKey extends BasePrefix{
 
-	private UserKey(String prefix) {
-		super(prefix);
-	}
-	// 静态变量
-	public static UserKey getById = new UserKey("id");
+    public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
 
-	public static UserKey getByName = new UserKey("name");
+    private UserKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+
+	public static UserKey token = new UserKey(TOKEN_EXPIRE, "tk");
 }

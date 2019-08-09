@@ -6,7 +6,7 @@ package com.jmall.high.controller;
 
 import com.jmall.high.redis.RedisService;
 import com.jmall.high.result.Result;
-import com.jmall.high.service.MiaoshaUserService;
+import com.jmall.high.service.UserService;
 import com.jmall.high.vo.LoginVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class LoginController {
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
-	MiaoshaUserService userService;
+    UserService userService;
 	
 	@Autowired
 	RedisService redisService;
