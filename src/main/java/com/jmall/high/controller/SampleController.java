@@ -4,6 +4,8 @@
 package com.jmall.high.controller;
 
 import com.jmall.high.pojo.User;
+import com.jmall.high.redis.RedisService;
+import com.jmall.high.redis.UserKey;
 import com.jmall.high.result.Result;
 import com.jmall.high.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class SampleController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisService redisService;
 
     @RequestMapping("/thymeleaf")
     public String thymeleaf(Model model) {
@@ -36,6 +41,23 @@ public class SampleController {
     @ResponseBody // 将返回值序列化为json
     public Result<Boolean> dbTx() {
         userService.tx();
+        return Result.success(true);
+    }
+
+    @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<User> redisGet() {
+        User user = redisService.get(UserKey.getById, "" + 1, User.class);
+        return Result.success(user);
+    }
+
+    @RequestMapping("/redis/set")
+    @ResponseBody // 将返回值序列化为json
+    public Result<Boolean> redisSet() {
+        User user = new User();
+        user.setId(2);
+        user.setName("james2");
+        redisService.set(UserKey.getById, "" + 2, user); // UserKey:id2
         return Result.success(true);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "redis")
+// 从application.properties中获取配置信息
 public class RedisConfig {
     private String host;
     private int port;
