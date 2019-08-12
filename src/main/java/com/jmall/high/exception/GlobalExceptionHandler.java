@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@ControllerAdvice
+@ControllerAdvice // Advice 切面 AOP 抛出增强
 @ResponseBody
 public class GlobalExceptionHandler {
 	@ExceptionHandler(value=Exception.class)

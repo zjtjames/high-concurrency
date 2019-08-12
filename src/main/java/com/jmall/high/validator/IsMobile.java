@@ -15,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {IsMobileValidator.class })
-public @interface  IsMobile {
+@Constraint(validatedBy = {IsMobileValidator.class }) // 判断是否有效的条件
+public @interface IsMobile {
 	
 	boolean required() default true;
 	

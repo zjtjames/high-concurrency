@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 public class LoginController {
 
-	private static Logger log = LoggerFactory.getLogger(LoginController.class);
+	private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
     UserService userService;
@@ -37,8 +37,8 @@ public class LoginController {
     
     @RequestMapping("/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
-    	log.info(loginVo.toString());
+    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) { // @Valid是 JSR303参数检验
+    	logger.info(loginVo.toString());
     	//登录
     	userService.login(response, loginVo);
     	return Result.success(true);
