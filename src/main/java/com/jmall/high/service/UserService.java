@@ -56,7 +56,7 @@ public class UserService {
 		}
 		String mobile = loginVo.getMobile();
 		String formPass = loginVo.getPassword();
-		//判断手机号是否存在
+		// 判断手机号是否存在 用手机号当id
 		MiaoshaUser user = getById(Long.parseLong(mobile));
 		if(user == null) {
 			throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
@@ -69,7 +69,7 @@ public class UserService {
 			throw new GlobalException(CodeMsg.PASSWORD_ERROR);
 		}
 		//生成cookie
-		String token	 = UUIDUtil.uuid();
+		String token = UUIDUtil.uuid();
 		addCookie(response, token, user);
 		return true;
 	}

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// 用正则表达式校验手机号格式是否正确
 public class ValidatorUtil {
 	
 	private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
@@ -20,9 +21,4 @@ public class ValidatorUtil {
 		Matcher m = mobile_pattern.matcher(src);
 		return m.matches();
 	}
-	
-//	public static void main(String[] args) {
-//			System.out.println(isMobile("18912341234"));
-//			System.out.println(isMobile("1891234123"));
-//	}
 }

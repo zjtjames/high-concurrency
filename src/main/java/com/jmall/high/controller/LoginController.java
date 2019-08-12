@@ -32,7 +32,7 @@ public class LoginController {
 	
     @RequestMapping("/to_login")
     public String toLogin() {
-        return "login";
+        return "login"; // spring.thymeleaf.prefix=classpath:/templates/
     }
     
     @RequestMapping("/do_login")
