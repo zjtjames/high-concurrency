@@ -59,6 +59,9 @@ public class UserService {
 		// 判断手机号是否存在 用手机号当id
 		MiaoshaUser user = getById(Long.parseLong(mobile));
 		if(user == null) {
+            // 抛出的异常会被通过AOP实现的GlobalExceptionHandler拦截,然后返回Result.error(CodeMsg.SERVER_ERROR)等服务响应对象
+		    // 程序在执行完throw语句时立即终止，它后面的语句都不执行，类似于循环中的break。
+            // 所以能走到最后的就肯定是没问题的
 			throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
 		}
 		//验证密码
