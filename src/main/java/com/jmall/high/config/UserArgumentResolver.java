@@ -20,15 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
+// 解析出User对象 作为参数传给需要的Controller
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Autowired
 	UserService userService;
 	
 	public boolean supportsParameter(MethodParameter parameter) {
-		Class<?> clazz = parameter.getParameterType();
-		return clazz==MiaoshaUser.class;
-	}
+		Class<?> cls = parameter.getParameterType();
+        return cls == MiaoshaUser.class;
+    }
 
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
@@ -41,6 +42,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 			return null;
 		}
 		String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
+		// 根据cookie中的sessionid从redis中拿到User对象
 		return userService.getByToken(response, token);
 	}
 

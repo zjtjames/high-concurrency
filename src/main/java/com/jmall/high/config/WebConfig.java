@@ -18,6 +18,7 @@ public class WebConfig  extends WebMvcConfigurerAdapter{
 	UserArgumentResolver userArgumentResolver;
 	
 	@Override
+    // HandlerMethodArgumentResolver是用来给Controller传参的
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(userArgumentResolver);
 	}

@@ -36,7 +36,7 @@ public class UserService {
 		return userMapper.getById(id);
 	}
 	
-
+    // 根据sessionid从redis中拿User对象
 	public MiaoshaUser getByToken(HttpServletResponse response, String token) {
 		if(StringUtils.isEmpty(token)) {
 			return null;
