@@ -6,7 +6,7 @@ package com.jmall.high.redis;
 
 public class UserKey extends BasePrefix{
 
-    public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
+    public static final int TOKEN_EXPIRE = 3600 * 24 * 2; //两天 这是为了给cookie设置Max-Age
 
     private UserKey(int expireSeconds, String prefix) {
         super(expireSeconds, prefix);

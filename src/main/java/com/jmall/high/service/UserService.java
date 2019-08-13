@@ -42,7 +42,7 @@ public class UserService {
 			return null;
 		}
 		MiaoshaUser user = redisService.get(UserKey.token, token, MiaoshaUser.class);
-		//延长有效期
+		// 刷新有效期：1.重新往redis缓存中写session 2.重新设置cookie
 		if(user != null) {
 			addCookie(response, token, user);
 		}
