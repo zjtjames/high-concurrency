@@ -27,5 +27,4 @@ public class GoodsController {
         model.addAttribute("user", user);
         return "goods_list"; // spring.thymeleaf.prefix=classpath:/templates/
     }
-    
 }
