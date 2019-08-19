@@ -9,6 +9,7 @@ import com.jmall.high.pojo.MiaoshaGoods;
 import com.jmall.high.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class GoodsService {
 		return goodsMapper.getGoodsVoByGoodsId(goodsId);
 	}
 
+	// 减少miaosha_goods表中的库存
+    @Transactional
 	public void reduceStock(GoodsVo goods) {
 		MiaoshaGoods g = new MiaoshaGoods();
 		g.setGoodsId(goods.getId());
