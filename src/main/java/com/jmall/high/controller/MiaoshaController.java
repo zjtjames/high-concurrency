@@ -40,7 +40,7 @@ public class MiaoshaController {
 	MiaoshaService miaoshaService;
 	
     @RequestMapping("/do_miaosha")
-    public String list(Model model, MiaoshaUser user,
+    public String doMiaosha(Model model, MiaoshaUser user,
     		@RequestParam("goodsId")long goodsId) { //@RequestParam("goodsId") 接收前端post提交到表单里的参数
     	model.addAttribute("user", user);
     	if(user == null) {
@@ -53,7 +53,7 @@ public class MiaoshaController {
     		model.addAttribute("errmsg", CodeMsg.MIAO_SHA_OVER.getMsg());
     		return "miaosha_fail";
     	}
-    	// 判断是否已经秒杀到了，查询订单就说明秒杀到了，不能再重复秒杀，返回秒杀失败页面
+    	// 判断是否已经秒杀过一次了，查询订单就说明秒杀到一次了，不能再重复秒杀，返回秒杀失败页面
     	MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
     	if(order != null) {
     		model.addAttribute("errmsg", CodeMsg.REPEATE_MIAOSHA.getMsg());
@@ -63,7 +63,7 @@ public class MiaoshaController {
     	OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
     	model.addAttribute("orderInfo", orderInfo);
     	model.addAttribute("goods", goods);
-    	// 返回下单成功的页面
+    	// 秒杀成功 返回订单详情页
         return "order_detail";
     }
 }
