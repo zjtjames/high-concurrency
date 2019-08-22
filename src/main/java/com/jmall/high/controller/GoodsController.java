@@ -5,16 +5,23 @@
 package com.jmall.high.controller;
 
 import com.jmall.high.pojo.MiaoshaUser;
+import com.jmall.high.redis.GoodsKey;
 import com.jmall.high.redis.RedisService;
 import com.jmall.high.service.GoodsService;
 import com.jmall.high.service.UserService;
 import com.jmall.high.vo.GoodsVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring4.context.SpringWebContext;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -30,20 +37,47 @@ public class GoodsController {
 	@Autowired
     GoodsService goodsService;
 
-    @RequestMapping("/to_list")
-    public String list(Model model,MiaoshaUser user) {
+	@Autowired
+    ThymeleafViewResolver thymeleafViewResolver;
+
+	@Autowired
+    ApplicationContext applicationContext;
+
+	// 获取商品列表
+    @RequestMapping(value="/to_list", produces="text/html")
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user) {
         model.addAttribute("user", user);
-        //查询商品列表
+        // redis中取页面缓存
+        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+        if(!StringUtils.isEmpty(html)) {
+            return html;
+        }
+        // 获取model数据 model是mvc中的m
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodsList);
-        return "goods_list";
+        SpringWebContext ctx = new SpringWebContext(request,response,
+                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+        //手动渲染
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
+        // 缓存进redis中
+        if(!StringUtils.isEmpty(html)) {
+            redisService.set(GoodsKey.getGoodsList, "", html);
+        }
+        return html;
     }
 
-    @RequestMapping("/to_detail/{goodsId}")
-    public String detail(Model model,MiaoshaUser user,
-                         @PathVariable("goodsId")long goodsId) {
+    @RequestMapping(value="/to_detail/{goodsId}",produces="text/html")
+    @ResponseBody
+    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
+                          @PathVariable("goodsId")long goodsId) {
         model.addAttribute("user", user);
 
+        // redis中取页面缓存
+        String html = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+        if(!StringUtils.isEmpty(html)) {
+            return html;
+        }
+        // 获取model数据 model是mvc中的m
         GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
         model.addAttribute("goods", goods);
 
@@ -65,6 +99,14 @@ public class GoodsController {
         }
         model.addAttribute("miaoshaStatus", miaoshaStatus);
         model.addAttribute("remainSeconds", remainSeconds);
-        return "goods_detail";
+        SpringWebContext ctx = new SpringWebContext(request,response,
+                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+        // 手动渲染
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
+        // 缓存进redis中
+        if(!StringUtils.isEmpty(html)) {
+            redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
+        }
+        return html;
     }
 }
