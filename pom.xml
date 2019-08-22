@@ -7,6 +7,7 @@
     <groupId>com.jmall</groupId>
     <artifactId>high-concurrency</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>high-concurrency</name>
     <!-- FIXME change it to the project's website -->
@@ -92,6 +93,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -132,6 +134,11 @@
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <!--打jar包的插件-->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
             </plugins>
         </pluginManagement>
