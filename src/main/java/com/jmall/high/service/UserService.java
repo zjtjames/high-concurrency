@@ -31,10 +31,43 @@ public class UserService {
 	
 	@Autowired
 	RedisService redisService;
-	
+
+	// 对象缓存
 	public MiaoshaUser getById(long id) {
-		return userMapper.getById(id);
-	}
+		// 从redis中取缓存
+		MiaoshaUser user = redisService.get(UserKey.getById, ""+id, MiaoshaUser.class);
+		if(user != null) {
+			return user;
+		}
+		// 缓存没有命中则取数据库
+		user = userMapper.getById(id);
+		// user对象fastjson序列化后写入redis缓存
+        if (user != null) {
+            redisService.set(UserKey.getById, "" + id, user);
+        }
+        return user;
+    }
+
+    // 用户更新密码 对象有更新时如何处理对象缓存
+    public boolean updatePassword(String token, long id, String formPass) {
+        //取user
+        MiaoshaUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+
+        //更新数据库
+        MiaoshaUser toBeUpdated = new MiaoshaUser();
+        toBeUpdated.setId(id);
+        toBeUpdated.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+        UserMapper.update(toBeUpdated);
+
+        //处理对象缓存 token对象缓存和id对象缓存都要改
+        redisService.delete(UserKey.getById, ""+id);
+        user.setPassword(toBeUpdated.getPassword());
+        redisService.set(UserKey.token, token, user);
+        return true;
+    }
 	
     // 根据sessionid从redis中拿User对象
 	public MiaoshaUser getByToken(HttpServletResponse response, String token) {
