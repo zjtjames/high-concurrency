@@ -24,5 +24,7 @@ public interface OrderMapper {
 	@Insert("insert into miaosha_order (user_id, goods_id, order_id)values(#{userId}, #{goodsId}, #{orderId})")
 	int insertMiaoshaOrder(MiaoshaOrder miaoshaOrder);
 
-	
+	// 根据订单号获取订单详情
+    @Select("select * from order_info where id = #{orderId}")
+    OrderInfo getOrderById(@Param("orderId")long orderId);
 }

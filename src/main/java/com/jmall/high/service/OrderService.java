@@ -26,6 +26,10 @@ public class OrderService {
 		return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
 	}
 
+	public OrderInfo getOrderById(long orderId) {
+		return orderMapper.getOrderById(orderId);
+	}
+
 	@Transactional
 	public OrderInfo createOrder(MiaoshaUser user, GoodsVo goods) {
 		OrderInfo orderInfo = new OrderInfo();
@@ -46,5 +50,4 @@ public class OrderService {
         orderMapper.insertMiaoshaOrder(miaoshaOrder); // 再在maiosha_order中插入订单
 		return orderInfo;
 	}
-	
 }
