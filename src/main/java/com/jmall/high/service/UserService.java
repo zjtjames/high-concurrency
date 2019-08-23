@@ -60,7 +60,7 @@ public class UserService {
         MiaoshaUser toBeUpdated = new MiaoshaUser();
         toBeUpdated.setId(id);
         toBeUpdated.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
-        UserMapper.update(toBeUpdated);
+        userMapper.update(toBeUpdated);
 
         //处理对象缓存 token对象缓存和id对象缓存都要改
         redisService.delete(UserKey.getById, ""+id);

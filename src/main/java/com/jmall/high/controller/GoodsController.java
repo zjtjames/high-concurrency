@@ -52,6 +52,7 @@ public class GoodsController {
         if(!StringUtils.isEmpty(html)) {
             return html;
         }
+        // 如果缓存未命中
         // 获取model数据 model是mvc中的m
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodsList);
