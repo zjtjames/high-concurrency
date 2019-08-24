@@ -8,6 +8,8 @@ import com.jmall.high.dao.OrderMapper;
 import com.jmall.high.pojo.MiaoshaOrder;
 import com.jmall.high.pojo.MiaoshaUser;
 import com.jmall.high.pojo.OrderInfo;
+import com.jmall.high.redis.OrderKey;
+import com.jmall.high.redis.RedisService;
 import com.jmall.high.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,13 @@ public class OrderService {
 	@Autowired
     OrderMapper orderMapper;
 
+    @Autowired
+    RedisService redisService;
+
 	// 根据用户id和商品id查询是否有秒杀订单
 	public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
-		return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+//		return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+        return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, MiaoshaOrder.class);
 	}
 
 	public OrderInfo getOrderById(long orderId) {
@@ -48,6 +54,8 @@ public class OrderService {
 		miaoshaOrder.setOrderId(orderId);
 		miaoshaOrder.setUserId(user.getId());
         orderMapper.insertMiaoshaOrder(miaoshaOrder); // 再在maiosha_order中插入订单
+        //缓存MiaoshaOrder到redis中
+        redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), miaoshaOrder);
 		return orderInfo;
 	}
 }
