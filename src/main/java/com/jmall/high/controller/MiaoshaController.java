@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -51,6 +52,9 @@ public class MiaoshaController implements InitializingBean{
     @Autowired
     MQSender sender;
 
+    // 内存标记 用一个map标记某商品是否已经卖完了 如果已经卖完了 连redis都不访问了
+    private HashMap<Long, Boolean> localOverMap =  new HashMap<>();
+
 
     @Override
     /**
@@ -65,6 +69,7 @@ public class MiaoshaController implements InitializingBean{
         for (GoodsVo goods : goodsVoList) {
             // 在系统初始化时，将商品库存加载到redis缓存中
             redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goods.getId(), goods.getStockCount());
+            localOverMap.put(goods.getId(), false);
         }
     }
 
@@ -77,9 +82,16 @@ public class MiaoshaController implements InitializingBean{
             return Result.error(CodeMsg.SESSION_ERROR);
     	}
 
+        //内存标记，减少redis访问
+        boolean over = localOverMap.get(goodsId);
+        if(over) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+
         // redis中减库存
         long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
         if(stock < 0) {
+            localOverMap.put(goodsId, true);
             return Result.error(CodeMsg.MIAO_SHA_OVER);
         }
 
