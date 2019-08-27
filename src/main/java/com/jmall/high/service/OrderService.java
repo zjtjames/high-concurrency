@@ -53,8 +53,8 @@ public class OrderService {
 		miaoshaOrder.setGoodsId(goods.getId());
 		miaoshaOrder.setOrderId(orderId);
 		miaoshaOrder.setUserId(user.getId());
-        orderMapper.insertMiaoshaOrder(miaoshaOrder); // 再在maiosha_order中插入订单
-        //缓存MiaoshaOrder到redis中
+        orderMapper.insertMiaoshaOrder(miaoshaOrder); // 再在maiosha_order中插入秒杀订单
+        //缓存秒杀订单MiaoshaOrder到redis中
         redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), miaoshaOrder);
 		return orderInfo;
 	}
