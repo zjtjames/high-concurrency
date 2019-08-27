@@ -29,9 +29,10 @@ public class GoodsService {
 
 	// 减少miaosha_goods表中的库存
     @Transactional
-	public void reduceStock(GoodsVo goods) {
+	public boolean reduceStock(GoodsVo goods) {
 		MiaoshaGoods g = new MiaoshaGoods();
 		g.setGoodsId(goods.getId());
-		goodsMapper.reduceStock(g);
+		int result = goodsMapper.reduceStock(g);
+		return result > 0;
 	}
 }

@@ -26,7 +26,7 @@ public class OrderService {
     @Autowired
     RedisService redisService;
 
-	// 根据用户id和商品id查询是否有秒杀订单
+	// 从redis缓存中根据用户id和商品id查询是否有秒杀订单
 	public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
 //		return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
         return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, MiaoshaOrder.class);
@@ -48,10 +48,10 @@ public class OrderService {
 		orderInfo.setOrderChannel(1);
 		orderInfo.setStatus(0);
 		orderInfo.setUserId(user.getId());
-		long orderId = orderMapper.insert(orderInfo); // 先在order_info表中插入订单 返回值为订单号
+		orderMapper.insert(orderInfo); // 先在order_info表中插入订单
 		MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
 		miaoshaOrder.setGoodsId(goods.getId());
-		miaoshaOrder.setOrderId(orderId);
+		miaoshaOrder.setOrderId(orderInfo.getId());
 		miaoshaOrder.setUserId(user.getId());
         orderMapper.insertMiaoshaOrder(miaoshaOrder); // 再在maiosha_order中插入秒杀订单
         //缓存秒杀订单MiaoshaOrder到redis中

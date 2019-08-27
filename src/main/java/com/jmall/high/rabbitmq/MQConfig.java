@@ -28,7 +28,7 @@ public class MQConfig {
      * */
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE, true); // QUEUE是队列的名称，第二个参数表示需要持久化
+        return new Queue(MIAOSHA_QUEUE, true); // MIAOSHA_QUEUE是队列的名称，第二个参数表示需要持久化
     }
 
     /**

@@ -76,7 +76,7 @@ public class GoodsController {
         model.addAttribute("user", user);
 
         // redis中取页面缓存
-        String html = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+        String html = redisService.get(GoodsKey.getGoodsDetail, "" + goodsId, String.class);
         if(!StringUtils.isEmpty(html)) {
             return html;
         }
