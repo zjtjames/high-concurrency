@@ -16,7 +16,7 @@ public class RedisPoolFactory {
     private RedisConfig redisConfig;
 
     @Bean // 按类型自动注入
-    public JedisPool JedisPoolFactory() { // jedis线程池
+    public JedisPool JedisPoolFactory() { // jedis连接池
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxIdle(redisConfig.getPoolMaxIdle());
         poolConfig.setMaxTotal(redisConfig.getPoolMaxTotal());
