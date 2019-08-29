@@ -31,7 +31,7 @@
     1. 减库存
     2. 生成普通订单（在order_info表中insert）
     3. 生成秒杀订单（在miaosha_order表中insert）
-    4. 使用@Transactional注解，是方法具有事务性，全部成功或全部回滚
+    4. 使用@Transactional注解，使方法具有事务性，全部成功或全部回滚
 * 实现分布式session
     1. 使用UUID作为session的id
     2. 用fastjson将User对象序列化为字符串，保存session信息
